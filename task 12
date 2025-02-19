@@ -1,0 +1,73 @@
+import java.io.*;
+
+// Custom Exception for Invalid Age
+class InvalidAgeException extends Exception {
+    public InvalidAgeException(String message) {
+        super(message);
+    }
+}
+
+// AgeValidator Class to Validate Age
+class AgeValidator {
+    public static void validateAge(int age) throws InvalidAgeException {
+        if (age < 0) {
+            throw new InvalidAgeException("Age cannot be negative!");
+        }
+        System.out.println("Valid age: " + age);
+    }
+}
+
+// Main Class
+public class ExceptionHandlingDemo {
+    public static void main(String[] args) {
+        // 1. Handle Division by Zero
+        try {
+            int a = 10, b = 0;
+            int result = a / b;
+            System.out.println("Result: " + result);
+        } catch (ArithmeticException e) {
+            System.out.println("Error: Division by zero is not allowed.");
+        }
+
+        // 2. Open and Close Resources in Finally Block
+        FileReader reader = null;
+        try {
+            reader = new FileReader("sample.txt");
+            BufferedReader br = new BufferedReader(reader);
+            System.out.println("File opened successfully.");
+        } catch (FileNotFoundException e) {
+            System.out.println("Error: File not found.");
+        } finally {
+            try {
+                if (reader != null) {
+                    reader.close();
+                    System.out.println("File closed successfully.");
+                }
+            } catch (IOException e) {
+                System.out.println("Error closing the file.");
+            }
+        }
+
+        // 3. Custom Exception Handling for Age Validation
+        try {
+            AgeValidator.validateAge(-5);
+        } catch (InvalidAgeException e) {
+            System.out.println("Exception: " + e.getMessage());
+        }
+
+        // 4. Method with Throws (File Reading)
+        try {
+            readFile("test.txt");
+        } catch (IOException e) {
+            System.out.println("Error reading file: " + e.getMessage());
+        }
+    }
+
+    // Method that Throws IOException
+    public static void readFile(String fileName) throws IOException {
+        FileReader file = new FileReader(fileName);
+        BufferedReader br = new BufferedReader(file);
+        System.out.println("Reading file: " + fileName);
+        br.close();
+    }
+}
